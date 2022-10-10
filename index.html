@@ -35,22 +35,12 @@
         Search
       </button>
     </div>
-    <!-- mobile search result -->
-    <div id="search-result" class="row row-cols-1 row-cols-md-3 g-4">
-      <div class="col">
-        <div class="card h-100">
-          <img src="..." class="card-img-top" alt="..." />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">
-              This is a longer card with supporting text below as a natural
-              lead-in to additional content. This content is a little bit
-              longer.
-            </p>
-          </div>
-        </div>
-      </div>
+    <!-- if no result found -->
+    <div id="noMatch" class="text-danger">
+      <h2>No match found</h2>
     </div>
+    <!-- mobile search result -->
+    <div id="search-result" class="row row-cols-1 row-cols-md-3 g-4"></div>
     <!-- JavaScript Bundle with Popper -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
