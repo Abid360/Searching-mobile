@@ -6,13 +6,6 @@ const searchMobile = () => {
   //clear data
   searchField.value = "";
 
-  // Error Handling For SearchBar
-  const searchInput = parseFloat(searchField);
-  const error = document.getElementById("error-info");
-
-  // if (typeof searchField !== "string" || searchInput <= 0) {
-  //   error.innerText = "Enter a Phone name";
-  // } else
   {
     const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
     fetch(url)
@@ -38,7 +31,7 @@ const displaySearchResults = (mobiles) => {
                     <div class="card-body">
                         <h4 class="card-title">${mobile.phone_name}</h4>
                         <h5 class="card-text">Brand: ${mobile.brand}</h5>
-                        <button onclick="loadMobile('${mobile.slug}')" class="btn btn-primary text-white">Details</button>
+                        <button onclick="loadMobile('${mobile.slug}')" class="btn btn-info text-white">Details</button>
                     </div>
                 </div>`;
     SearchResult.appendChild(div);
@@ -54,8 +47,9 @@ const loadMobile = (id) => {
 
 const loadMobileDetail = (info) => {
   document.getElementById("mobile-details").innerHTML = `
-  <div>
+  <div class="card rounded d-flex align-items-center">
       <img src="${info.image}" alt="">
+      <div class="text-center">
   <h3>Name: ${info.name}</h3> 
   <h4>Brand: ${info.brand}</h4>  
   <h4>Storage: ${info.mainFeatures.storage}</h4>
@@ -69,6 +63,7 @@ const loadMobileDetail = (info) => {
     info.others.WLAN
   }</h6>
   <h6>Release Date:${info.releaseDate ? info.releaseDate : "No data found"}</h6>
+  </div>
 </div>
 `;
 };
