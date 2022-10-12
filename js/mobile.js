@@ -1,20 +1,23 @@
-// document.getElementById("noMatch").style.display = "none";
+document.getElementById("error-msg").style.display = "none";
 
 const searchMobile = () => {
   const searchField = document.getElementById("search-field");
   const searchText = searchField.value;
   //clear data
   searchField.value = "";
-
   {
     const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
     fetch(url)
       .then((res) => res.json())
-      .then((data) => displaySearchResults(data.data));
-    // .catch((error) => displayError(error));
+      .then((data) => displaySearchResults(data.data))
+      .catch((error) => displayError(error));
   }
 };
 
+const displayError = (error) => {
+  document.getElementById("error-msg").style.display = "block";
+  console.log(error);
+};
 const displaySearchResults = (mobiles) => {
   const SearchResult = document.getElementById("search-result");
   SearchResult.textContent = "";
@@ -47,13 +50,13 @@ const loadMobile = (id) => {
 
 const loadMobileDetail = (info) => {
   document.getElementById("mobile-details").innerHTML = `
-  <div class="card rounded d-flex align-items-center">
+  <div class="card rounded d-flex align-items-center col-sm-auto mb-5">
       <img src="${info.image}" alt="">
       <div class="text-center">
   <h3>Name: ${info.name}</h3> 
   <h4>Brand: ${info.brand}</h4>  
-  <h4>Storage: ${info.mainFeatures.storage}</h4>
-  <h5>Display: ${info.mainFeatures.displaySize}</h5>
+  <h6>Storage: ${info.mainFeatures.storage}</h6>
+  <h6>Display: ${info.mainFeatures.displaySize}</h6>
   <h6>Chipset: ${info.mainFeatures.chipSet}</h6>
   <h6>Memory: ${info.mainFeatures.memory}</h6>
   <h6>Sensor: ${info.mainFeatures.sensors.join()}</h6>
