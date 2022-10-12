@@ -1,53 +1,74 @@
-document.getElementById("noMatch").style.display = "none";
+// document.getElementById("noMatch").style.display = "none";
 
 const searchMobile = () => {
   const searchField = document.getElementById("search-field");
   const searchText = searchField.value;
   //clear data
   searchField.value = "";
-  document.getElementById("noMatch").style.display = "none";
-  //load data
-  const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
 
-  // console.log(url);
-  fetch(url)
-    .then((res) => res.json())
-    .then((data) => displaySearchResults(data.data))
-    .catch((error) => displayError(error));
+  // Error Handling For SearchBar
+  const searchInput = parseFloat(searchField);
+  const error = document.getElementById("error-info");
+
+  // if (typeof searchField !== "string" || searchInput <= 0) {
+  //   error.innerText = "Enter a Phone name";
+  // } else
+  {
+    const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => displaySearchResults(data.data));
+    // .catch((error) => displayError(error));
+  }
 };
 
-const displayError = (error) => {
-  document.getElementById("noMatch").style.display = "block";
-};
 const displaySearchResults = (mobiles) => {
   const SearchResult = document.getElementById("search-result");
   SearchResult.textContent = "";
-  if (mobiles.length == 0) {
-    const noMatch = document.getElementById("noMatch");
-    noMatch.style.display = "block";
-  }
-  mobiles.forEach((mobile) => {
-    console.log(mobile);
+  const first20Phone = mobiles.slice(0, 20);
+
+  for (const mobile of first20Phone) {
+    // console.log(mobile);
     const div = document.createElement("div");
-    div.classList.add("col");
     div.innerHTML = `
-    <div class="card h-100">
-          <img src="${mobile.image}" class="card-img-top" alt="..." />
-          <div class="card-body">
-            <h5 class="card-title">${mobile.phone_name}</h5>
-            <p class="card-text">
-            ${mobile.brand}
-            </p>
-          </div>
-          <button onclick="loadMobileDetail(${mobile.slug.startsWith(
-            "-"
-          )})" class="btn btn-primary" type="button">Detail</button>
-        </div>
-    `;
+                <div class="card rounded d-flex align-items-center">
+                    <div class="phone-pic">
+                        <img src="${mobile.image}" class="card-img-top" alt="">
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">${mobile.phone_name}</h4>
+                        <h5 class="card-text">Brand: ${mobile.brand}</h5>
+                        <button onclick="loadMobile('${mobile.slug}')" class="btn btn-primary text-white">Details</button>
+                    </div>
+                </div>`;
     SearchResult.appendChild(div);
-  });
+  }
 };
 
-const loadMobileDetail = (mobileId) => {
-  console.log(mobileId);
+const loadMobile = (id) => {
+  const url = `https://openapi.programming-hero.com/api/phone/${id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => loadMobileDetail(data.data));
+};
+
+const loadMobileDetail = (info) => {
+  document.getElementById("mobile-details").innerHTML = `
+  <div>
+      <img src="${info.image}" alt="">
+  <h3>Name: ${info.name}</h3> 
+  <h4>Brand: ${info.brand}</h4>  
+  <h4>Storage: ${info.mainFeatures.storage}</h4>
+  <h5>Display: ${info.mainFeatures.displaySize}</h5>
+  <h6>Chipset: ${info.mainFeatures.chipSet}</h6>
+  <h6>Memory: ${info.mainFeatures.memory}</h6>
+  <h6>Sensor: ${info.mainFeatures.sensors.join()}</h6>
+  <h6>Others: Bluetooth-${info.others.Bluetooth},GPS-${info.others.GPS},NFC-${
+    info.others.NFC
+  },Radio-${info.others.Radio},USB-${info.others.USB},WLAN-${
+    info.others.WLAN
+  }</h6>
+  <h6>Release Date:${info.releaseDate ? info.releaseDate : "No data found"}</h6>
+</div>
+`;
 };
